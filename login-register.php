@@ -21,15 +21,14 @@
 				require('php/db.php');
 				// If form submitted, insert values into the database.
 				if (isset($_POST['log-username'])){
-				        // removes backslashes
+				    // removes backslashes
 					$username = stripslashes($_REQUEST['log-username']);
-				        //escapes special characters in a string
+				    //escapes special characters in a string
 					$username = mysqli_real_escape_string($con,$username);
 					$password = stripslashes($_REQUEST['log-password']);
 					$password = mysqli_real_escape_string($con,$password);
 					//Checking is user existing in the database or not
-				        $query = "SELECT * FROM `users` WHERE username='$username'
-					and password='".md5($password)."'";
+				    $query = "SELECT * FROM `users` WHERE username='$username' and password='".md5($password)."'";
 					$result = mysqli_query($con,$query) or die(mysql_error());
 					$rows = mysqli_num_rows($result);
 			        if($rows==1){
@@ -62,22 +61,42 @@
 					// require('db.php');
 					// If form submitted, insert values into the database.
 					if (isset($_REQUEST['username'])){
-					        // removes backslashes
+					    // removes backslashes
 						$username = stripslashes($_REQUEST['username']);
-					        //escapes special characters in a string
+					    //escapes special characters in a string
 						$username = mysqli_real_escape_string($con,$username); 
 						$password = stripslashes($_REQUEST['password']);
 						$password = mysqli_real_escape_string($con,$password);
 						$trn_date = date("Y-m-d H:i:s");
-					        $query = "INSERT into `users` (username, password, trn_date)
-					VALUES ('$username', '".md5($password)."', '$trn_date')";
-				        $result = mysqli_query($con,$query);
-				        if($result){
-				            echo "<div class='form'>
-							<h3>You are registered successfully.</h3>
-							<br/><- You can login now on the left </div>";
-				        }
-					}else{
+					    $con2="SELECT * FROM `users` WHERE username='$username'";
+					    $result= mysqli_query($con, $con2);
+					    $rows = mysqli_num_rows($result);
+					    if ($rows<1) {
+						   	$query = "INSERT into `users` (username, password, trn_date)
+							VALUES ('$username', '".md5($password)."', '$trn_date')";
+					        $result = mysqli_query($con,$query);
+					        if($result){
+					            echo "<div class='form'>
+								<h3>You are registered successfully.</h3>
+								<br/><- You can login now on the left </div>";
+					        }
+					    } else { ?> 
+					    	<form name="registration" method="post" action="">
+								<div class="form-group">
+									<label for="username">Username</label>
+									<input type="text" name="username" class="form-control is-invalid" id="username" placeholder="Enter username">
+									<div class="invalid-feedback" style="display: block;">
+										Username <?php echo $username?> is already taken.
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="password1">Password</label>
+									<input type="password" name="password" class="form-control" id="password" placeholder="Password">
+								</div>
+								<button type="submit" name="submit" class="btn btn-primary">Register</button>
+							</form>
+					    <?php } 
+					}else{ 
 				?>
 				
 				<form name="registration" method="post" action="">
