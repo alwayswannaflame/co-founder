@@ -20,53 +20,36 @@
 		<?php 
 			require('php/db.php');
 			$user=$_SESSION['username'];
+			
+			if (isset($_REQUEST['firstname'])){
+				$firstname=$_POST['firstname'];
+				$secondname=$_POST['secondname'];
+				$phonenumber=$_POST['phonenumber'];
+				$emailadress=$_POST['email'];
+				$state=$_POST['state'];
+				$city=$_POST['city'];	
+				$query="UPDATE users
+				SET firstname = '$firstname',  secondname = '$secondname', phonenumber = '$phonenumber' , emailadress = '$emailadress' , state = '$state' , city = '$city' , 
+				up = 1
+				WHERE username='$user'";
+				if ($con->connect_error) {
+	    			die("Connection failed: " . $conn->connect_error);
+				} 
+				if (mysqli_query($con,$query) === TRUE) {
+					echo '<div class="alert alert-success" role="alert">Your profile was updated successfully</div>';
+				} else {
+					echo "Error: " . $query . "<br>" . $con->error;
+				}
+			}	
+
 			$link="SELECT * FROM `users` WHERE username='$user'";
 			$result = mysqli_query($con,$link) or die(mysql_error());
 
 			$up = mysqli_fetch_assoc($result);
-			if (isset($_REQUEST['firstname'])){
-			$firstname=$_POST['firstname'];
-			$secondname=$_POST['secondname'];
-			$phonenumber=$_POST['phonenumber'];
-			$emailadress=$_POST['email'];
-			$state=$_POST['state'];
-			$city=$_POST['city'];	
-			$query="UPDATE users
-			SET firstname = '$firstname',  secondname = '$secondname', phonenumber = '$phonenumber' , emailadress = '$emailadress' , state = '$state' , city = '$city' , 
-			up = 1
-			WHERE username='$user'";
-			if ($con->connect_error) {
-    			die("Connection failed: " . $conn->connect_error);
-				} 
-				if (mysqli_query($con,$query) === TRUE) {
-				    echo "New records created successfully";
-				} else {
-				    echo "Error: " . $query . "<br>" . $con->error;
-				}
-
-				$con->close();}	
 	        if($up['up']==1){ 
 
 	    ?>
-	     <p> You have your profile updated </p>
-	     <a href="#" class="btn btn-primary">Update profile</a>
-		
-		<dl>
-  			<dt>Username</dt>
-  			<dd><?php echo $up['username']; ?></dd>
-  			<dt>Firstname</dt>
-  			<dd><?php echo $up['firstname'];?></dd>
-  			<dt>Lastname</dt>
-  			<dd><?php echo $up['secondname'];?></dd>
-  			<dt>Phone</dt>
-  			<dd><?php echo $up['phonenumber']; ?></dd>
-  			<dt>Email</dt>
-  			<dd><?php echo $up['emailadress'];?></dd>
-  			<dt>State</dt>
-  			<dd><?php echo $up['state']; ?></dd>
-  			<dt>City</dt>
-  			<dd><?php echo $up['city'];?></dd>
-		</dl>
+	     <p>Your profile info:</p>
 		<form name="registration" method="post" action="" class="row">
 			<div class="col-sm-6">
 				<div class="form-group">
@@ -97,7 +80,7 @@
 				</div>
 			</div>
 			<div class="col-sm-12 text-center">
-				<button type="submit" name="submit" class="btn btn-primary">Submit</button>
+				<button type="submit" name="submit" class="btn btn-primary">Update profile</button>
 			</div>
 		</form>	
 		<?php 
@@ -142,6 +125,7 @@
 		
 		?>
 	</div>
+	<?php include 'templates/footer.php';?>
 	<script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
 </body>
 </html>

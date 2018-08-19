@@ -121,6 +121,7 @@
 			<?php }?>
 		</div>
 	</div>
+	<?php include 'templates/footer.php';?>
 	<script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
 </body>
 </html>
