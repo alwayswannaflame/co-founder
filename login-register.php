@@ -33,8 +33,9 @@
 					$rows = mysqli_num_rows($result);
 			        if($rows==1){
 					    $_SESSION['username'] = $username;
-				            // Redirect user to index.php
-					    header("Location: my-account.php");
+				?>        
+				<a href="my-account.php">Go to your account to give us more information</a>
+				<?php
 				         }else{
 						echo "<div class='form'>
 						<h3>Username/password is incorrect.</h3>
@@ -64,7 +65,7 @@
 					    // removes backslashes
 						$username = stripslashes($_REQUEST['username']);
 					    //escapes special characters in a string
-						$username = mysqli_real_escape_string($con,$username); 
+						$username = mysqli_real_escape_string($con,$username);
 						$password = stripslashes($_REQUEST['password']);
 						$password = mysqli_real_escape_string($con,$password);
 						$trn_date = date("Y-m-d H:i:s");
